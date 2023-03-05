@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=id, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet" href="style.css" class="style">
+        <title>Task To Do</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <img src="image/logo.png" alt="Task logo" class="logo">
+            <div class="header">
+                <h2 class="header-description">Let’s get shit done!<img src="image/icon-header.png" alt="Icon peace">
+                </h2>
+                <button class="open-new-task-modal" data-target="#new-task-modal">+ New task</button>
+            </div>
+
+            <div id="new-task-modal" class="modal">
+                <div id="modal-content">
+                    <div class="close-new-task-modal">&times;</div>
+                    <div id="modal-header">
+                        <h2 class="text-modal">Add new todo</h2>
+                    </div>
+                    <div id="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <input id="new-category" type="text" placeholder="Category. Etc: Marketing ..."
+                                    required>
+                                <input id="new-title" type="text" placeholder="Title" required>
+                                <textarea id="new-content" type="text" placeholder="Content" required></textarea>
+                                <button id="new-task-submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="edit-task-modal" class="modal">
+                <div id="edit-modal-content">
+                    <div class="close-edit-task-modal">&times;</div>
+                    <div id="edit-modal-header">
+                        <h2 class="edit-text-modal">Edit todo</h2>
+                    </div>
+                    <div id="edit-modal-body">
+                        <form>
+                            <div class="edit-form-group">
+                                <input type="text" placeholder="Category. Etc: Marketing ..." name="category" required>
+                                <input type="text" placeholder="Title" name="title" required>
+                                <textarea type="text" placeholder="Content" name="content" required></textarea>
+                                <div class="edit-selection">
+                                    <label>
+                                        <input type="radio" name="task" value="todo"><i></i>
+                                        Todo
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="task" value="doing"><i></i>
+                                        Doing
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="task" value="finished"><i></i>
+                                        Finished
+                                    </label>
+                                </div>
+                                <button id="edit-task-submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="board">
+                <div class="swim-lane" id="todo-lane" lane="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div class="swim-lane-header">
+                        <h3 class="heading-secondary blue">
+                            <span>Todo</span>
+                            <span class="badge">0</span>
+                        </h3>
+                        <div class="line blue"></div>
+                    </div>
+                    <!-- <div class="card" draggable="true">
+                        <div class="card-header">
+                            <h3 class="heading-tertiary">Marketing</h3>
+                            <div>
+                                <a class="open-edit-task-modal"><img src="image/icon-edit.png" src="Edit"></a>
+                                <a class="delete-task"><img src="image/icon-delete.png" src="Delete"></a>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h1 class="heading-primary">Write SEO article for new product</h1>
+                        </div>
+                        <div class="line-space"></div>
+                        <div class="card-footer">
+                            <p class="subheading">This is an existential moment for effective altruism and the
+                                rationalist community writ-large.
+                            </p>
+                            <div class="card-time">
+                                <img src="image/icon-clock.png">
+                                <p>June 30, 2022</p>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="swim-lane" id="doing-lane" lane="doing" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div class="swim-lane-header">
+                        <h3 class="heading-secondary yellow">
+                            <span>Doing</span>
+                            <span class="badge">0</span>
+                        </h3>
+                        <div class="line yellow"></div>
+                    </div>
+
+                </div>
+                <div class="swim-lane" id="finished-lane" lane="finished" ondrop="drop(event)"
+                    ondragover="allowDrop(event)">
+                    <div class="swim-lane-header">
+                        <h3 class="heading-secondary green">
+                            <span>Finished</span>
+                            <span class="badge">0</span>
+                        </h3>
+                        <div class="line green"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script src="script.js"></script>
+    </body>
+
+</html>
