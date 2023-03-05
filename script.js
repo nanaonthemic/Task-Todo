@@ -20,6 +20,46 @@ const newCategory = document.querySelector("#new-category");
 const newTitle = document.querySelector("#new-title");
 const newContent = document.querySelector("#new-content");
 
+const renderLane = (laneName) => {
+	const lane = document.querySelector(`#${laneName}-lane`);
+
+	const data = JSON.parse(localStorage.getItem(laneName) || "[]");
+	data.map(({ id, category, title, content, createAt }) => {
+		const htmlContent = `
+    <div id="${id}" class="card" draggable="true" lane="todo" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
+        <div class="card-header">
+            <h3 class="heading-tertiary" data="category">${category}</h3>
+            <div>
+                <a class="open-edit-task-modal"><img src="image/icon-edit.png" src="Edit" onclick="handleEditButtonClicked('${id}')"></a>
+                <a class="delete-task"><img src="image/icon-delete.png" src="Delete" onclick="handleDeleteButtonClicked('${id}')"></a>
+            </div>
+        </div>
+        <div class="card-content">
+            <h1 class="heading-primary" data="title">${title}</h1>
+        </div>
+        <div class="line-space"></div>
+        <div class="card-footer">
+            <p class="subheading" data="content">${content}</p>
+            <div class="card-time">
+                <img src="image/icon-clock.png">
+                <p data="createAt">${createAt}</p>
+            </div>
+        </div>
+    </div>
+        `;
+
+		lane.innerHTML += htmlContent;
+	});
+
+	setTimeout(() => {
+		updateLaneSize(laneName);
+	}, 0);
+};
+
+renderLane("todo");
+renderLane("doing");
+renderLane("finished");
+
 // NEW TASK MODAL
 // openNewTodoModals.forEach((openNewTodoModal) => {
 openNewTodoModal.addEventListener("click", function () {
@@ -105,8 +145,10 @@ function drop(event) {
 	event.target.appendChild(card);
 
 	updateLaneSize(card.getAttribute("lane"));
+	updateLocalStorage(card.getAttribute("lane"));
 	card.setAttribute("lane", event.target.getAttribute("lane"));
 	updateLaneSize(event.target.getAttribute("lane"));
+	updateLocalStorage(event.target.getAttribute("lane"));
 }
 
 function dragOver(e) {
@@ -211,11 +253,15 @@ const handleEditButtonClicked = (cardId) => {
 		const targetLane = document.querySelector(
 			`#${cardElement.getAttribute("lane")}-lane`
 		);
-		if (cardElement.getAttribute("lane") !== taskRadio.value)
+		if (cardElement.getAttribute("lane") !== taskRadio.value) {
 			targetLane.appendChild(cardElement);
+			updateLaneSize(taskRadio.value);
+			updateLocalStorage(taskRadio.value);
+		}
 
 		editTodoModal.style.display = "none";
 		updateLaneSize(targetLane.getAttribute("lane"));
+		updateLocalStorage(targetLane.getAttribute("lane"));
 
 		resetModal();
 	};
@@ -225,6 +271,7 @@ const handleDeleteButtonClicked = (cardId) => {
 	const cardElement = document.querySelector(`#${cardId}`);
 	cardElement.parentElement.removeChild(cardElement);
 	updateLaneSize(cardElement.getAttribute("lane"));
+	updateLocalStorage(cardElement.getAttribute("lane"));
 };
 
 const updateLaneSize = (laneName) => {
@@ -233,6 +280,37 @@ const updateLaneSize = (laneName) => {
 
 	const cardElements = laneElement.querySelectorAll(".card");
 	badgeElement.innerHTML = cardElements.length;
+
+	console.log("Update lanesize");
+	console.log(laneName);
+	console.log(cardElements.length);
+};
+
+const updateLocalStorage = (laneName) => {
+	const laneElement = document.querySelector(`[lane="${laneName}"]`);
+	const cardElements = laneElement.querySelectorAll(".card");
+
+	const data = [];
+	cardElements.forEach((cardElement) => {
+		const categoryElement = cardElement.querySelector(`[data="category"]`);
+		const titleElement = cardElement.querySelector(`[data="title"]`);
+		const contentElement = cardElement.querySelector(`[data="content"]`);
+		const createAtElement = cardElement.querySelector(`[data="createAt"]`);
+
+		const item = {
+			id: cardElement.id,
+			category: categoryElement.innerHTML,
+			title: titleElement.innerHTML,
+			content: contentElement.innerHTML,
+			createAt: createAtElement.innerHTML,
+		};
+		data.push(item);
+	});
+
+	console.log("Update local storage");
+	console.log(laneName);
+	console.log(data);
+	localStorage.setItem(laneName, JSON.stringify(data));
 };
 
 const createNewTodo = (event) => {
@@ -277,7 +355,10 @@ const createNewTodo = (event) => {
             <p class="subheading" data="content">${newContent.value}</p>
             <div class="card-time">
                 <img src="image/icon-clock.png">
-                <p>${new Date().toLocaleDateString("en-US", options)}</p>
+                <p data="createAt">${new Date().toLocaleDateString(
+									"en-US",
+									options
+								)}</p>
             </div>
         </div>
     </div>
@@ -288,6 +369,7 @@ const createNewTodo = (event) => {
 
 	resetModal();
 	updateLaneSize("todo");
+	updateLocalStorage("todo");
 };
 
 newTodoSubmit.addEventListener("click", createNewTodo);
