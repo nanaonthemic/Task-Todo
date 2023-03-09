@@ -317,12 +317,19 @@ function dragLeave() {
 function dragDrop(event) {
 	event.target.appendChild(draggableTodo);
 	console.log("dropped");
+	// draggableTodo;
 	updateLaneSize(draggableTodo.getAttribute("lane"));
 	updateLaneSize(event.target.parentElement.parentElement.getAttribute("lane"));
 	updateLocalStorage(draggableTodo.getAttribute("lane"));
 	updateLocalStorage(
 		event.target.parentElement.parentElement.getAttribute("lane")
 	);
+	const laneTarget =
+		event.target.parentElement.parentElement.getAttribute("lane");
+	// const lanePrevious = draggableTodo.getAttribute("lane");
+	// console.log(lanePrevious);
+	// console.log(laneTarget);
+	draggableTodo.setAttribute("lane", laneTarget);
 }
 
 // UPDATE LOCAL STOTRAGE
