@@ -76,13 +76,15 @@
             </div>
 
             <div class="board">
-                <div class="swim-lane" id="todo-lane" lane="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="swim-lane" id="todo-lane" lane="todo">
                     <div class="swim-lane-header">
                         <h3 class="heading-secondary blue">
                             <span>Todo</span>
                             <span class="badge">0</span>
                         </h3>
                         <div class="line blue"></div>
+                    </div>
+                    <div class="swim-lane-body" id="todo-lane-body">
                     </div>
                     <!-- <div class="card" draggable="true">
                         <div class="card-header">
@@ -107,24 +109,27 @@
                         </div>
                     </div> -->
                 </div>
-                <div class="swim-lane" id="doing-lane" lane="doing" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="swim-lane" id="doing-lane" lane="doing">
                     <div class="swim-lane-header">
                         <h3 class="heading-secondary yellow">
                             <span>Doing</span>
                             <span class="badge">0</span>
                         </h3>
                         <div class="line yellow"></div>
+                        <div class="swim-lane-body" id="doing-lane-body">
+                        </div>
                     </div>
 
                 </div>
-                <div class="swim-lane" id="finished-lane" lane="finished" ondrop="drop(event)"
-                    ondragover="allowDrop(event)">
+                <div class="swim-lane" id="finished-lane" lane="finished">
                     <div class="swim-lane-header">
                         <h3 class="heading-secondary green">
                             <span>Finished</span>
                             <span class="badge">0</span>
                         </h3>
                         <div class="line green"></div>
+                        <div class="swim-lane-body" id="finished-lane-body">
+                        </div>
                     </div>
                 </div>
             </div>

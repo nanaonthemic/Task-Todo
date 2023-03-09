@@ -10,8 +10,11 @@ const deleteTodoCards = document.querySelectorAll(".delete-task");
 const submitEditModal = document.querySelector("#edit-task-submit");
 
 const todoLane = document.querySelector("#todo-lane");
+const todoLaneBody = document.querySelector("#todo-lane-body");
 const doingLane = document.querySelector("#doing-lane");
+const doingLaneBody = document.querySelector("#doing-lane-body");
 const finishedLane = document.querySelector("#finished-lane");
+const finishedLaneBody = document.querySelector("#finished-lane-body");
 
 const cards = document.querySelectorAll(".card");
 const allSwimlanes = document.querySelectorAll(".swim-lane");
@@ -21,12 +24,12 @@ const newTitle = document.querySelector("#new-title");
 const newContent = document.querySelector("#new-content");
 
 const renderLane = (laneName) => {
-	const lane = document.querySelector(`#${laneName}-lane`);
+	const lane = document.querySelector(`#${laneName}-lane-body`);
 
 	const data = JSON.parse(localStorage.getItem(laneName) || "[]");
 	data.map(({ id, category, title, content, createAt }) => {
 		const htmlContent = `
-    <div id="${id}" class="card" draggable="true" lane="todo" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
+    <div id="${id}" class="card" draggable="true" lane=${laneName} ondragstart="dragStart(event)" ondragend="dragEnd(event)">
         <div class="card-header">
             <h3 class="heading-tertiary" data="category">${category}</h3>
             <div>
@@ -61,19 +64,12 @@ renderLane("doing");
 renderLane("finished");
 
 // NEW TASK MODAL
-// openNewTodoModals.forEach((openNewTodoModal) => {
 openNewTodoModal.addEventListener("click", function () {
-	// document.querySelector(openNewTodoModal.dataset.target).add("active");
 	addNewTodoModal.style.display = "block";
 });
-// });
-
-// closeNewTodoModals.forEach((closeNewTodoModal) => {
 closeNewTodoModal.addEventListener("click", function () {
-	// document.querySelector(openNewTodoModal.dataset.target).add("active");
 	addNewTodoModal.style.display = "none";
 });
-// });
 
 // EDIT TASK MODAL
 
@@ -101,75 +97,7 @@ window.addEventListener("click", function (e) {
 	}
 });
 
-// DRAG AND DROP
-let draggableTodo = null;
-cards.forEach((card) => {
-	card.addEventListener("dragstart", dragStart);
-	card.addEventListener("dragend", dragEnd);
-});
-
-function dragStart(event) {
-	// console.log(event);
-	setTimeout(() => {
-		event.target.style.display = "none";
-	}, 0);
-
-	event.dataTransfer.setData("cardId", event.target.id);
-}
-
-function dragEnd(event) {
-	console.log(event);
-	draggableTodo = null;
-	setTimeout(() => {
-		event.target.style.display = "block";
-	}, 0);
-	// console.log("dragEnd");
-}
-
-allSwimlanes.forEach((swimlane) => {
-	swimlane.addEventListener("dragover", dragOver);
-	// swimlane.addEventListener("dragenter", dragEnter);
-	// swimlane.addEventListener("dragleave", dragLeave);
-	// swimlane.addEventListener("drop", dragDrop);
-});
-
-function allowDrop(event) {
-	event.preventDefault();
-}
-
-function drop(event) {
-	event.preventDefault();
-	const cardId = event.dataTransfer.getData("cardId");
-	const card = document.querySelector(`#${cardId}`);
-
-	event.target.appendChild(card);
-
-	updateLaneSize(card.getAttribute("lane"));
-	updateLocalStorage(card.getAttribute("lane"));
-	card.setAttribute("lane", event.target.getAttribute("lane"));
-	updateLaneSize(event.target.getAttribute("lane"));
-	updateLocalStorage(event.target.getAttribute("lane"));
-}
-
-function dragOver(e) {
-	e.preventDefault();
-	//   console.log("dragOver");
-}
-
-// function dragEnter() {
-// 	console.log("dragEnter");
-// }
-
-// function dragLeave() {
-// 	console.log("dragLeave");
-// }
-
-// function dragDrop() {
-// 	this.appendChild(draggableTodo);
-// 	// console.log("dropped");
-// }
-
-// ADD NEW TASK TODO
+//RESET MODAL
 
 const resetModal = () => {
 	newCategory.value = "";
@@ -197,6 +125,7 @@ document.querySelectorAll("textarea").forEach((element) => {
 	};
 });
 
+// HANDLE EDIT BUTTON SUBMIT MODAL
 const handleEditButtonClicked = (cardId) => {
 	const cardElement = document.querySelector(`#${cardId}`);
 	const categoryElement = cardElement.querySelector(`[data="category"]`);
@@ -218,8 +147,8 @@ const handleEditButtonClicked = (cardId) => {
 	const taskRadio = form.querySelector(
 		`[name="task"][value=${cardElement.getAttribute("lane")}]`
 	);
-	taskRadio.value = formData.get("task");
 	taskRadio.click();
+	taskRadio.value = formData.get("task");
 
 	editTodoModal.style.display = "block";
 
@@ -251,7 +180,7 @@ const handleEditButtonClicked = (cardId) => {
 		cardElement.setAttribute("lane", formData.get("task"));
 
 		const targetLane = document.querySelector(
-			`#${cardElement.getAttribute("lane")}-lane`
+			`#${cardElement.getAttribute("lane")}-lane-body`
 		);
 		if (cardElement.getAttribute("lane") !== taskRadio.value) {
 			targetLane.appendChild(cardElement);
@@ -260,8 +189,10 @@ const handleEditButtonClicked = (cardId) => {
 		}
 
 		editTodoModal.style.display = "none";
-		updateLaneSize(targetLane.getAttribute("lane"));
-		updateLocalStorage(targetLane.getAttribute("lane"));
+		updateLaneSize(targetLane.parentElement.parentElement.getAttribute("lane"));
+		updateLocalStorage(
+			targetLane.parentElement.parentElement.getAttribute("lane")
+		);
 
 		resetModal();
 	};
@@ -280,38 +211,9 @@ const updateLaneSize = (laneName) => {
 
 	const cardElements = laneElement.querySelectorAll(".card");
 	badgeElement.innerHTML = cardElements.length;
-
-	console.log("Update lanesize");
-	console.log(laneName);
-	console.log(cardElements.length);
 };
 
-const updateLocalStorage = (laneName) => {
-	const laneElement = document.querySelector(`[lane="${laneName}"]`);
-	const cardElements = laneElement.querySelectorAll(".card");
-
-	const data = [];
-	cardElements.forEach((cardElement) => {
-		const categoryElement = cardElement.querySelector(`[data="category"]`);
-		const titleElement = cardElement.querySelector(`[data="title"]`);
-		const contentElement = cardElement.querySelector(`[data="content"]`);
-		const createAtElement = cardElement.querySelector(`[data="createAt"]`);
-
-		const item = {
-			id: cardElement.id,
-			category: categoryElement.innerHTML,
-			title: titleElement.innerHTML,
-			content: contentElement.innerHTML,
-			createAt: createAtElement.innerHTML,
-		};
-		data.push(item);
-	});
-
-	console.log("Update local storage");
-	console.log(laneName);
-	console.log(data);
-	localStorage.setItem(laneName, JSON.stringify(data));
-};
+// ADD NEW TASK TODO
 
 const createNewTodo = (event) => {
 	event.preventDefault();
@@ -363,10 +265,11 @@ const createNewTodo = (event) => {
         </div>
     </div>
     `;
-
-	todoLane.insertAdjacentHTML("beforeend", html);
+	// todoLaneBody.appendChild(html);
+	todoLaneBody.insertAdjacentHTML("beforeend", html);
 	addNewTodoModal.style.display = "none";
-
+	document.querySelector(`#${id}`).addEventListener("dragstart", dragStart);
+	document.querySelector(`#${id}`).addEventListener("dragend", dragEnd);
 	resetModal();
 	updateLaneSize("todo");
 	updateLocalStorage("todo");
@@ -374,10 +277,75 @@ const createNewTodo = (event) => {
 
 newTodoSubmit.addEventListener("click", createNewTodo);
 
-// // DELETE TASK
-// deleteCards.forEach((deleteCard, index) => {
-// 	deleteCard.addEventListener("click", function () {
-// 		const cardElements = todoLane.querySelectorAll(".card");
-// 		todoLane.removeChild(cardElements[index]);
-// 	});
-// });
+// DRAG AND DROP
+
+const allSwimlaneBody = document.querySelectorAll(".swim-lane-body");
+let draggableTodo = null;
+
+function dragStart(event) {
+	draggableTodo = event.target;
+	setTimeout(() => {
+		event.target.style.display = "none";
+	}, 0);
+}
+function dragEnd(event) {
+	draggableTodo = null;
+	setTimeout(() => {
+		event.target.style.display = "block";
+	}, 0);
+}
+
+allSwimlaneBody.forEach((lane) => {
+	lane.addEventListener("dragover", dragOver);
+	lane.addEventListener("dragenter", dragEnter);
+	lane.addEventListener("dragleave", dragLeave);
+	lane.addEventListener("drop", dragDrop);
+});
+
+function dragOver(e) {
+	e.preventDefault();
+}
+
+function dragEnter() {
+	console.log("dragEnter");
+}
+
+function dragLeave() {
+	console.log("dragLeave");
+}
+
+function dragDrop(event) {
+	event.target.appendChild(draggableTodo);
+	console.log("dropped");
+	updateLaneSize(draggableTodo.getAttribute("lane"));
+	updateLaneSize(event.target.parentElement.parentElement.getAttribute("lane"));
+	updateLocalStorage(draggableTodo.getAttribute("lane"));
+	updateLocalStorage(
+		event.target.parentElement.parentElement.getAttribute("lane")
+	);
+}
+
+// UPDATE LOCAL STOTRAGE
+
+const updateLocalStorage = (laneName) => {
+	const laneElement = document.querySelector(`[lane="${laneName}"]`);
+	const cardElements = laneElement.querySelectorAll(".card");
+
+	const data = [];
+	cardElements.forEach((cardElement) => {
+		const categoryElement = cardElement.querySelector(`[data="category"]`);
+		const titleElement = cardElement.querySelector(`[data="title"]`);
+		const contentElement = cardElement.querySelector(`[data="content"]`);
+		const createAtElement = cardElement.querySelector(`[data="createAt"]`);
+
+		const item = {
+			id: cardElement.id,
+			category: categoryElement.innerHTML,
+			title: titleElement.innerHTML,
+			content: contentElement.innerHTML,
+			createAt: createAtElement.innerHTML,
+		};
+		data.push(item);
+	});
+	localStorage.setItem(laneName, JSON.stringify(data));
+};

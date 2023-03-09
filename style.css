@@ -19,6 +19,8 @@ body {
 	overflow-x: hidden;
 }
 
+/* GENERAL */
+
 input,
 textarea {
 	border: 1px solid #333333;
@@ -147,18 +149,6 @@ textarea {
 	border: 2px solid;
 }
 
-/* .line.blue {
-	border-color: #00a6da;
-}
-
-.line.yellow {
-	border-color: #dab700;
-}
-
-.line.green {
-	border-color: #3bc057;
-} */
-
 .blue {
 	border-color: #00a6da;
 	background-color: #00a6da;
@@ -174,17 +164,17 @@ textarea {
 	background-color: #3bc057;
 }
 
+/* SWIM LANE */
+
 .swim-lane {
 	padding-bottom: 2.4rem;
-	position: relative;
 	width: 37.6rem;
-	height: 100%;
-	overflow-y: scroll;
 }
 
-.swim-lane-header {
-	position: fixed;
+.swim-lane-body {
 	background-color: white;
+	height: 52rem;
+	overflow-y: scroll;
 }
 
 .card {
@@ -197,6 +187,7 @@ textarea {
 		rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 	margin-top: 2.2rem;
 	padding: 2rem;
+	display: block;
 }
 
 .swim-lane .card:nth-child(2) {
