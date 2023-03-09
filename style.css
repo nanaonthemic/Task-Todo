@@ -34,7 +34,7 @@ textarea {
 }
 
 .logo {
-	margin-top: 36px;
+	margin-top: 3.6rem;
 }
 
 .header {
@@ -82,9 +82,9 @@ textarea {
 }
 
 .heading-primary {
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 700;
-	line-height: 20px;
+	line-height: 2rem;
 	display: flex;
 	align-items: center;
 
@@ -93,12 +93,12 @@ textarea {
 }
 
 .heading-secondary {
-	width: 376px;
-	height: 34px;
+	width: 37.6rem;
+	height: 3.4rem;
 	font-style: normal;
 	font-weight: 700;
-	font-size: 16px;
-	line-height: 20px;
+	font-size: 1.6rem;
+	line-height: 2rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -131,8 +131,8 @@ textarea {
 }
 
 .subheading {
-	font-size: 10px;
-	line-height: 13px;
+	font-size: 1rem;
+	line-height: 1.3rem;
 	display: flex;
 	align-items: center;
 
@@ -141,10 +141,10 @@ textarea {
 
 .line {
 	margin-top: 1.6rem;
-	width: 374px;
-	height: 0px;
-	left: 52px;
-	top: 190px;
+	width: 37.4rem;
+	height: 0;
+	left: 5.2rem;
+	top: 19rem;
 
 	border: 2px solid;
 }
@@ -178,7 +178,7 @@ textarea {
 }
 
 .card {
-	width: 373.76px;
+	width: 37.36rem;
 	/* height: 21.6rem; */
 
 	background: #ffffff;
@@ -204,8 +204,8 @@ textarea {
 }
 
 .line-space {
-	width: 253px;
-	height: 0px;
+	width: 25.3rem;
+	height: 0;
 
 	background-color: #dbdbdb;
 	padding: 0.1rem;
